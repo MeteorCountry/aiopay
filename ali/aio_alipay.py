@@ -20,11 +20,11 @@ class AioAliPay(BaseAliPay):
     async def verified_sync_response(self, data, response_type):
         url = self._gateway + "?" + self.sign_data(data)
         if self.session:
-            async with self.session.request('GTE',url) as res:
-                raw_string = (await res.read()).decode()
+            async with self.session.request('GET',url) as res:
+                raw_string = await res.text()
                 return self._verify_and_return_sync_response(raw_string, response_type)
-        async with aiohttp.request('GTE',url) as res:
-            raw_string = (await res.read()).decode()
+        async with aiohttp.request('GET',url) as res:
+            raw_string = await res.text()
             return self._verify_and_return_sync_response(raw_string, response_type)
 
 if __name__ == '__main__':
